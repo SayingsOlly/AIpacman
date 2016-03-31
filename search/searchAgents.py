@@ -302,11 +302,12 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        #print "state:",state
 
-        visited_corners = state[1] # get corner tuple.
+        "get corner tuple."
+        visited_corners = state[1]
 
-        if len(visited_corners) == 4: # see if the pacman reach the four corners.
+        "see if the pacman reach the four corners."
+        if len(visited_corners) == 4:
             return True
         else:
             return False
@@ -378,6 +379,12 @@ def cornersHeuristic(state, problem):
     visited_corners = state[1]
     sum = 0
 
+    """
+    get the corners that haven't been visited yet
+    by simply traverse the corners list 
+    and filter the corners that not in the visited_corners list
+    """
+
     unvisited_corners_list = list(filter(lambda x:x not in visited_corners,corners))
 
     return calculateHeuristic(cur,unvisited_corners_list)
@@ -425,6 +432,7 @@ class FoodSearchProblem:
         return successors
 
     def getCostOfActions(self, actions):
+
         """Returns the cost of a particular sequence of actions.  If those actions
         include an illegal move, return 999999"""
         x,y= self.getStartState()[0]
@@ -475,10 +483,13 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     foods = foodGrid.asList()
 
-    # if len(foods) == 0:
-    #     return 0
 
-    # max_distance = max(map(lambda x:mazeDistance(x,position,problem.startingGameState),foods))
+    """
+    create a new heuristic about food
+    by simply get the max maze distance that from current positions to startingGameState
+    mazeDistance is a special distance that take the walls in the maze into consideration.
+    and it's a better way to calculate the heuristic.
+    """
 
     maxDistance=0
     for i in foodGrid.asList():
@@ -552,8 +563,12 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         """
         x,y = state
 
+        "get food list"
         foods = self.food.asList()
 
+        """
+        calculate the manhattanDistance from current state to each food in foodlists
+        """
         distance, food = min([(util.manhattanDistance(state, food), food) for food in foods])
 
         isGoal = state == food
